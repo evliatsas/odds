@@ -11,14 +11,10 @@ class MessageConsumer extends Consumer {
    * @param cb
    */
   consume(message, cb) {
-    /* eslint class-methods-use-this: 0 */
-    console.log(`Got message to consume: `, message);
-    //  throw new Error('TEST!');
-    //  cb(new Error('TEST!'));
-    //  const timeout = parseInt(Math.random() * 100);
-    //  setTimeout(() => {
-    //      cb();
-    //  }, timeout);
+    var startDate = new Date(message["timestamp"]);
+    var endDate = new Date();
+    var duration = (endDate - startDate) / 1000;
+    console.log("consumed msg #" + message["id"] + " after " + duration + "ms");
     cb();
   }
 }

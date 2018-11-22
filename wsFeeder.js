@@ -1,13 +1,21 @@
 const io = require("socket.io")(3000);
+var i=0;
+var intervalId = null;
 
 io.on("connection", function(socket) {
   console.log("client connected...");
-  sendData(socket);
-  socket.on("disconnect", function() {});
+  run(socket);
+  socket.on("disconnect", function() {
+    if(intervalId) clearInterval(intervalId);
+    intervalId = null;
+    console.timeEnd("exec");
+  });
 });
 
 function createObject(seed) {
   var item = {};
+  item["id"] = seed;
+  item["timestamp"] = new Date();
   for (var i = 0; i < 170; i++) {
     item["prop" + i + 1] = seed + i;
   }
@@ -15,12 +23,15 @@ function createObject(seed) {
 }
 
 function sendData(socket) {
-  console.time("exec");
-  for (var i = 0; i < 800; i++) {
-    var item = createObject(i + 1);
+  var item = createObject(i + 1);
     socket.emit("newItem", item);
-    console.log("item send." + (i + 1));
-  }
+    console.log("item send." + (i + 1));  
+    i++;  
+}
 
-  console.timeEnd("exec");
+function run(socket){
+  console.time("exec");  
+  intervalId = setInterval(()=> {
+    sendData(socket);
+  }, 1);
 }

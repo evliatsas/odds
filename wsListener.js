@@ -10,18 +10,27 @@ const socket = io.connect(
   "http://localhost:3000/",
   { reconnect: true }
 );
-socket.on("connect", function() {
-  console.log("connected....");
-});
-socket.on("disconnect", function() {
-  console.log("disconnected....");
-  producer.shutdown();
-});
 socket.on("newItem", function(msg) {
   const message = new Message();
   message.setBody(msg);
   producer.produceMessage(message, err => {
-    console.log("error .... " + err);
+    if(err) console.log("error .... " + err);
   });
-  console.log("enqueued msg #" + msg[0]);
+  var startDate = new Date(msg["timestamp"]);
+  var endDate = new Date();
+  var duration = (endDate - startDate) / 1000;
+  console.log("enqueued msg #" + msg["id"] + " after " + duration + "ms");
 });
+
+function closeListener(){
+  socket.disconnect();
+  producer.shutdown();
+}
+
+process.on('SIGTERM', () => {
+  closeListener();
+})
+
+process.on('SIGINT', () => {
+  closeListener();
+})
