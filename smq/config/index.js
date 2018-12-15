@@ -1,16 +1,16 @@
-"use strict";
+'use strict'
 
-const path = require("path");
+const path = require('path')
 
 module.exports = {
   redis: {
-    host: "127.0.0.1",
+    host: '127.0.0.1',
     port: 6379
   },
   log: {
     enabled: false,
     options: {
-      level: "trace"
+      level: 'trace'
       /*
             streams: [
                 {
@@ -22,7 +22,7 @@ module.exports = {
   },
   monitor: {
     enabled: true,
-    host: "127.0.0.1",
+    host: '127.0.0.1',
     port: 3001
   }
-};
+}

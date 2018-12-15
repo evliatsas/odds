@@ -1,0 +1,29 @@
+redis:
+  image: redis
+  container_name: cache
+  expose:
+    - 6379
+  ports:
+    - 6379:6379
+# monitor:
+#   build: ./
+#   volumes:
+#     - ./:/var/www/app
+#   links:
+#     - redis
+#   ports:
+#     - 3001:3001
+#   command: sh -c 'npm i && node queue-monitor.js'
+restapi:
+  build: ./restapi
+  volumes:
+    - ./restapi/:/var/www/app
+  links:
+    - redis
+  ports:
+    - 3002:3002
+  environment:
+    - REDIS_URL=redis://cache
+    - NODE_ENV=development
+    - PORT=3002
+  command: sh -c 'npm i && node index.js'
