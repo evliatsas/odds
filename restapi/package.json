@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/evliatsas/odds#readme",
   "dependencies": {
+    "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "redis": "^2.8.0"
   }
