@@ -1,7 +1,9 @@
 require('dotenv').config()
 const app = require('express')()
-const server = require('http').createServer(app)
+const http = require('http').Server(app)
 const redisClient = require('./redis-client')
+let conf = require('./socket-client-config')('fuzzers')
+const socket = require('socket.io-client')(process.env.SOCKET)
 
 app.get('/store/:key', async (req, res) => {
   const { key } = req.params
@@ -15,7 +17,26 @@ app.get('/:key', async (req, res) => {
   return res.json(JSON.parse(rawData))
 })
 
-const PORT = process.env.PORT || 3000
-server.listen(PORT, () => {
+const PORT = process.env.PORT || 5000
+http.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`)
 })
+
+socket.on('connect', function() {
+  console.log('connect')
+  socket.emit('authentication', conf)
+  socket.on('unauthorized', data => {
+    console.log(data)
+  })
+  socket.on('authenticated', function() {
+    console.log('authenticated')
+    socket.on('disconnect', function(data) {
+      console.log('disconnect', data)
+    })
+    socket.on('bot-data', function(data) {
+      console.log(data)
+    })
+  })
+})
+
+socket.connect()
