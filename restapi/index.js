@@ -3,7 +3,12 @@ const app = require('express')()
 const http = require('http').Server(app)
 const redisClient = require('./redis-client')
 let conf = require('./socket-client-config')('fuzzers')
+var io = require('socket.io')(http)
 const socket = require('socket.io-client')(process.env.SOCKET)
+
+io.on('connection', function(socket) {
+  console.log('a user connected')
+})
 
 app.get('/store/:key', async (req, res) => {
   const { key } = req.params
@@ -34,7 +39,7 @@ socket.on('connect', function() {
       console.log('disconnect', data)
     })
     socket.on('bot-data', function(data) {
-      console.log(data)
+      //console.log(data)
     })
   })
 })
