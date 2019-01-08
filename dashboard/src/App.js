@@ -7,6 +7,11 @@ class App extends Component {
   constructor(props) {
     super(props)
     var socket = io(process.env.REACT_APP_SOCKET)
+
+    socket.on('odd', function(msg) {
+      console.log(msg)
+    })
+
     this.state = {
       socket
     }

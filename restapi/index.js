@@ -40,6 +40,7 @@ socket.on('connect', function() {
     })
     socket.on('bot-data', function(data) {
       //console.log(data)
+      io.emit('odd', data)
     })
   })
 })
