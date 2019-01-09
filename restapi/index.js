@@ -38,8 +38,8 @@ socket.on('connect', function() {
     socket.on('disconnect', function(data) {
       console.log('disconnect', data)
     })
-    socket.on('bot-data', function(data) {
-      //console.log(data)
+    socket.on('bot-data', async data => {
+      await redisClient.setAsync(data.d.event.h, JSON.stringify(data))
       io.emit('odd', data)
     })
   })
