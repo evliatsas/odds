@@ -1,14 +1,17 @@
-require('dotenv').config()
+const config = require('./config')
 const app = require('express')()
 const http = require('http').Server(app)
 const redisClient = require('./redis-client')
-let conf = require('./socket-client-config')('fuzzers')
-var io = require('socket.io')(http)
-const socket = require('socket.io-client')(process.env.SOCKET)
 
-io.on('connection', function(socket) {
-  console.log('a user connected')
-})
+const io = require('socket.io')(config.socket.port)
+const redisAdapter = require('socket.io-redis')
+
+io.adapter(
+  redisAdapter({
+    host: config.redis.host,
+    port: config.redis.port
+  })
+)
 
 app.get('/store/:key', async (req, res) => {
   const { key } = req.params
@@ -22,27 +25,11 @@ app.get('/:key', async (req, res) => {
   return res.json(JSON.parse(rawData))
 })
 
-const PORT = process.env.PORT || 5000
+io.on('odd', function(msg) {
+  console.log(msg)
+})
+
+const PORT = config.api.port
 http.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`)
 })
-
-socket.on('connect', function() {
-  console.log('connect')
-  socket.emit('authentication', conf)
-  socket.on('unauthorized', data => {
-    console.log(data)
-  })
-  socket.on('authenticated', function() {
-    console.log('authenticated')
-    socket.on('disconnect', function(data) {
-      console.log('disconnect', data)
-    })
-    socket.on('bot-data', async data => {
-      await redisClient.setAsync(data.d.event.h, JSON.stringify(data))
-      io.emit('odd', data)
-    })
-  })
-})
-
-socket.connect()
