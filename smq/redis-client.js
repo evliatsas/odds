@@ -4,8 +4,8 @@ const config = require('./config')
 const redis = require('redis')
 const { promisify } = require('util')
 
-const host = config.redis.host
-const port = config.redis.port
+const host = config.smq.redis.host
+const port = config.smq.redis.port
 const uri = `redis://${host}:${port}`
 const client = redis.createClient(uri)
 
