@@ -37,6 +37,16 @@ app.use(helmet())
 
 app.post('/login', handlers.login)
 app.get('/sports', middleware.checkToken, dataHandlers.getSports)
+app.get(
+  '/competitions/:sport',
+  middleware.checkToken,
+  dataHandlers.getCompetitions
+)
+app.get(
+  '/teams/:sport/:competition',
+  middleware.checkToken,
+  dataHandlers.getTeams
+)
 app.get('/', handlers.index)
 app.use('*', handlers.notFound)
 
