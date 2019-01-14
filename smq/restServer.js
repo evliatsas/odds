@@ -11,6 +11,7 @@ const app = express()
 const middleware = require('./authMiddleware')
 const handlers = require('./apiMainHandlers')
 const dataHandlers = require('./apiDataHandlers')
+const initData = require('./initialize-data')
 
 var accessLogStream = rfs('access.log', {
   interval: '1d',
@@ -37,7 +38,9 @@ app.use(helmet())
 app.post('/login', handlers.login)
 app.get('/sports', middleware.checkToken, dataHandlers.getSports)
 app.get('/', handlers.index)
-app.use('*', handlers.notFoound)
+app.use('*', handlers.notFound)
+
+initData.feed()
 
 const server = app.listen(config.restapi.port, function(err) {
   if (err) {
