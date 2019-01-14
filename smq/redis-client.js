@@ -1,13 +1,13 @@
-"use strict";
+'use strict'
 
-const config = require("./config");
-const redis = require("redis");
-const { promisify } = require("util");
+const config = require('./config')
+const redis = require('redis')
+const { promisify } = require('util')
 
-const host = config.smq.redis.host;
-const port = config.smq.redis.port;
-const uri = `redis://${host}:${port}`;
-const client = redis.createClient(uri);
+const host = config.smq.redis.host
+const port = config.smq.redis.port
+const uri = `redis://${host}:${port}`
+const client = redis.createClient(uri)
 
 module.exports = {
   ...client,
@@ -18,5 +18,6 @@ module.exports = {
   lpushAsync: promisify(client.lpush).bind(client),
   saddAsync: promisify(client.sadd).bind(client),
   sismemberAsync: promisify(client.sismember).bind(client),
-  sremAsync: promisify(client.srem).bind(client)
-};
+  sremAsync: promisify(client.srem).bind(client),
+  smembersAsync: promisify(client.smembers).bind(client)
+}

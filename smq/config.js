@@ -40,6 +40,14 @@ module.exports.odds = {
   }
 }
 
-module.exports.restapi = {
+module.exports.socket = {
   port: 5000
+}
+
+module.exports.restapi = {
+  port: 5001
+}
+
+module.exports.token = {
+  secret: 'sinnamonELak'
 }

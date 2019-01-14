@@ -3,7 +3,7 @@
 const config = require('./config')
 const redisSMQ = require('redis-smq')
 const redisClient = require('./redis-client')
-const io = require('socket.io')(config.restapi.port)
+const io = require('socket.io')(config.socket.port)
 const redisAdapter = require('socket.io-redis')
 
 io.adapter(
