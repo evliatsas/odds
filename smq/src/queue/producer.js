@@ -1,6 +1,6 @@
 'use strict'
 
-const config = require('./config')
+const config = require('../config/config')
 const socket = require('socket.io-client')(config.odds.uri)
 const { Producer, Message } = require('redis-smq')
 

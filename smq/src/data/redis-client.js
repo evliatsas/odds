@@ -1,11 +1,10 @@
 'use strict'
 
-const config = require('./config')
+const config = require('../config/config')
 const redis = require('redis')
 const { promisify } = require('util')
 
-const host = config.smq.redis.host
-const port = config.smq.redis.port
+const { host, port } = config.smq.redis
 const uri = `redis://${host}:${port}`
 const client = redis.createClient(uri)
 

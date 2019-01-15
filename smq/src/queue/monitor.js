@@ -1,6 +1,6 @@
 'use strict'
 
-const config = require('./config')
+const config = require('../config/config')
 const monitorServer = require('redis-smq').monitor(config.smq)
 
 monitorServer.listen(() => {

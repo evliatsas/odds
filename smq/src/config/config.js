@@ -45,7 +45,8 @@ module.exports.socket = {
 }
 
 module.exports.restapi = {
-  port: 5001
+  port: 5001,
+  logPath: '../../logs'
 }
 
 module.exports.token = {

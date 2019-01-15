@@ -1,0 +1,14 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 2018
+  },
+  "env": {
+    "es6": true
+  },
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": "error",
+    "prefer-destructuring": ["error", { "object": true, "array": true }]
+  },
+  "extends": ["prettier"]
+}

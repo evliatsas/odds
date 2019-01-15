@@ -1,0 +1,24 @@
+{
+  "apps": [
+    {
+      "name": "producer",
+      "script": "./src/queue/producer.js",
+      "watch": true
+    },
+    {
+      "name": "consumer",
+      "script": "./src/queue/consumer.js",
+      "watch": true
+    },
+    {
+      "name": "momnitor",
+      "script": "./src/queue/monitor.js",
+      "watch": false
+    },
+    {
+      "name": "rest-server",
+      "script": "./src/rest/restServer.js",
+      "watch": true
+    }
+  ]
+}

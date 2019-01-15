@@ -1,11 +1,10 @@
 const jwt = require('jsonwebtoken')
-const config = require('./config')
-const redisClient = require('./redis-client')
+const config = require('../config/config')
+const redisClient = require('../data/redis-client')
 
 module.exports.login = async (req, res) => {
   try {
-    let username = req.body.username
-    let password = req.body.password
+    let { username, password } = req.body
     let storedPassword = null
     if (username && password) {
       const uid = await redisClient.hgetAsync('users', username)
