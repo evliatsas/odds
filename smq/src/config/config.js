@@ -22,6 +22,11 @@ module.exports.smq = {
     enabled: true,
     host: '127.0.0.1',
     port: 3001
+  },
+  mongodb: {
+    host: '127.0.0.1',
+    port: '27017',
+    database: 'Odds'
   }
 }
 
