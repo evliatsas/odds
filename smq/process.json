@@ -11,7 +11,17 @@
       "watch": true
     },
     {
-      "name": "momnitor",
+      "name": "archive-producer",
+      "script": "./src/archive/producer.js",
+      "watch": true
+    },
+    {
+      "name": "archive-consumer",
+      "script": "./src/archive/consumer.js",
+      "watch": true
+    },
+    {
+      "name": "monitor",
       "script": "./src/queue/monitor.js",
       "watch": false
     },

@@ -14,7 +14,13 @@
       "type": "node",
       "request": "launch",
       "name": "Launch Consumer",
-      "program": "${workspaceFolder}/smq\\consumer.js"
+      "program": "${workspaceFolder}/smq/src/queue\\consumer.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Archive Consumer",
+      "program": "${workspaceFolder}/smq/src/archive\\consumer.js"
     }
   ]
 }
