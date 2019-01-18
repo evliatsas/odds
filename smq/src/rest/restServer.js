@@ -11,6 +11,7 @@ const app = express()
 const middleware = require('./authMiddleware')
 const handlers = require('./apiMainHandlers')
 const dataHandlers = require('./apiDataHandlers')
+const archiveHandlers = require('./apiArchiveHandlers')
 const initData = require('../data/initialize-data')
 
 var accessLogStream = rfs('access.log', {
@@ -55,6 +56,8 @@ app.get(
   dataHandlers.getEventsPerStatus
 )
 app.get('/event/:key', middleware.checkToken, dataHandlers.getEvent)
+
+app.get('/archive/event/:key', middleware.checkToken, archiveHandlers.getEvents)
 
 app.get('/', handlers.index)
 app.use('*', handlers.notFound)

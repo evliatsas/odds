@@ -14,7 +14,7 @@ class ArchiveConsumer extends Consumer {
       config.smq.mongodb.port
     }/${dbName}`
 
-    const client = new MongoClient(url)
+    const client = new MongoClient(url, { useNewUrlParser: true })
     client.connect((err, client) => {
       const db = client.db(dbName)
       this.archive = db.collection('archive')
