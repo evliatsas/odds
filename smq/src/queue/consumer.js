@@ -5,6 +5,7 @@ const redisSMQ = require('redis-smq')
 const redisClient = require('../data/redis-client')
 const io = require('socket.io')(config.socket.port)
 const redisAdapter = require('socket.io-redis')
+const auth = require('./auth')
 
 io.adapter(
   redisAdapter({
@@ -13,7 +14,13 @@ io.adapter(
   })
 )
 
-const Consumer = redisSMQ.Consumer
+require('socketio-auth')(io, {
+  authenticate: auth.authenticate,
+  postAuthenticate: auth.postAuthenticate,
+  timeout: 1000
+})
+
+const { Consumer } = redisSMQ
 
 class MessageConsumer extends Consumer {
   async consume(message, cb) {
