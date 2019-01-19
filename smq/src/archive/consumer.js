@@ -13,6 +13,9 @@ class ArchiveConsumer extends Consumer {
       message.d.event.competition
     }:${message.d.event.sport}:${new Date().getFullYear()}`
 
+    //create an archive entry for the message
+    //add key and timestamp
+    //serialize message data markets to a string, due to '.' constrain in property keys of MongoDB
     const entry = {
       key: msgKey,
       timestamp: new Date(),
@@ -22,6 +25,7 @@ class ArchiveConsumer extends Consumer {
       live: message.d.live
     }
     try {
+      //insert the archive entry to the db
       await this.archive.insertOne(entry)
     } catch (err) {
       console.log(err)
@@ -30,6 +34,7 @@ class ArchiveConsumer extends Consumer {
     cb()
   }
 
+  //initialize the mongo db client and the archive collection reference
   initMongoClient() {
     const dbName = config.smq.mongodb.database
     const url = `mongodb://${config.smq.mongodb.host}:${
