@@ -8,8 +8,16 @@ class App extends Component {
     super(props)
     var socket = io(process.env.REACT_APP_SOCKET)
 
-    socket.on('odd', function(msg) {
-      console.log(msg)
+    socket.on('connect', function() {
+      socket.emit('authentication', { username: 'admin', password: 'password' })
+      socket.on('unauthorized', function(err) {
+        console.log('There was an error with the authentication:', err.message)
+      })
+      socket.on('authenticated', function() {
+        socket.on('odd', function(msg) {
+          console.log(msg)
+        })
+      })
     })
 
     this.state = {
