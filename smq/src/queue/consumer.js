@@ -13,7 +13,7 @@ io.adapter(
   })
 )
 
-const { Consumer } = redisSMQ
+const Consumer = redisSMQ.Consumer
 
 class MessageConsumer extends Consumer {
   async consume(message, cb) {
