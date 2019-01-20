@@ -33,4 +33,16 @@ module.exports.authenticate = (socket, data, callback) => {
 module.exports.postAuthenticate = (socket, data) => {
   const { username } = data
   socket.client.user = username
+  redisClient.smembersAsync('statuses').then(statuses => {
+    const toRetrieve = statuses.filter(x => x !== 'completed')
+    for (let status of toRetrieve) {
+      redisClient.smembersAsync(status).then(members => {
+        for (let event of members) {
+          redisClient.getAsync(event).then(data => {
+            socket.emit('odd', data)
+          })
+        }
+      })
+    }
+  })
 }
