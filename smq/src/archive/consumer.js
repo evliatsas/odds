@@ -36,14 +36,12 @@ class ArchiveConsumer extends Consumer {
 
   //initialize the mongo db client and the archive collection reference
   initMongoClient() {
-    const dbName = config.smq.mongodb.database
-    const url = `mongodb://${config.smq.mongodb.host}:${
-      config.smq.mongodb.port
-    }/${dbName}`
+    const {host,port,database} = config.smq.mongodb
+    const url = `mongodb://${host}:${port}/${database}`
 
     const client = new MongoClient(url, { useNewUrlParser: true })
     client.connect((err, client) => {
-      const db = client.db(dbName)
+      const db = client.db(database)
       this.archive = db.collection('archive')
 
       //ensure proper indexes
