@@ -21,7 +21,7 @@ module.exports.smq = {
   monitor: {
     enabled: true,
     host: '127.0.0.1',
-    port: 3001
+    port: 5003
   },
   mongodb: {
     host: '127.0.0.1',
@@ -46,7 +46,8 @@ module.exports.odds = {
 }
 
 module.exports.socket = {
-  port: 5000
+  port: 5000,
+  ipAddress: '127.0.0.1'
 }
 
 module.exports.restapi = {

@@ -3,18 +3,22 @@
 const config = require('../config/config')
 const redisSMQ = require('redis-smq')
 const redisClient = require('../data/redis-client')
-const io = require('socket.io')(config.socket.port)
+const http = require('http')
+const io = require('socket.io')
 const redisAdapter = require('socket.io-redis')
 const auth = require('./auth')
 
-io.adapter(
+var server = http.createServer()
+server.listen(config.socket.port, config.socket.ipAddress)
+const socket = io.listen(server)
+socket.adapter(
   redisAdapter({
     host: config.smq.redis.host,
     port: config.smq.redis.port
   })
 )
 
-require('socketio-auth')(io, {
+require('socketio-auth')(socket, {
   authenticate: auth.authenticate,
   postAuthenticate: auth.postAuthenticate,
   timeout: 1000
@@ -57,7 +61,7 @@ class MessageConsumer extends Consumer {
       //replace the existing event data
       await redisClient.setAsync(msgKey, JSON.stringify(data))
       //emit the updated event
-      io.emit('odd', data)
+      socket.emit('odd', data)
     } else {
       //no existing data for the given event
       //insert the event data from the message
@@ -67,7 +71,7 @@ class MessageConsumer extends Consumer {
       // Update lists of sports, competitions and teams
       await this.addToSportList(msgKey, message)
       //emit the new event
-      io.emit('odd', message)
+      socket.emit('odd', message)
     }
 
     cb()
