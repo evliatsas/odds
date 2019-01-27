@@ -3,6 +3,7 @@
 const config = require('../config/config')
 const redisSMQ = require('redis-smq')
 const redisClient = require('../data/redis-client')
+const msgHelper = require('../data/message-helper')
 const http = require('http')
 const io = require('socket.io')
 const redisAdapter = require('socket.io-redis')
@@ -29,9 +30,7 @@ const { Consumer } = redisSMQ
 class MessageConsumer extends Consumer {
   async consume(message, cb) {
     //calculate unique message key from event data
-    const msgKey = `${message.d.event.h}:${message.d.event.g}:${
-      message.d.event.competition
-    }:${message.d.event.sport}:${new Date().getFullYear()}`
+    const msgKey = msgHelper.generateKey(message)
 
     const exists = await redisClient.existsAsync(msgKey)
     if (exists) {
@@ -69,7 +68,7 @@ class MessageConsumer extends Consumer {
       //add the new event to the event status SET
       await this.assignToStatusSet(message.d.meta.gameStatus, msgKey)
       // Update lists of sports, competitions and teams
-      await this.addToSportList(msgKey, message)
+      await this.addToSportList(message)
       //emit the new event
       socket.emit('odd', message)
     }
@@ -78,23 +77,27 @@ class MessageConsumer extends Consumer {
   }
 
   //add event to the sport list
-  async addToSportList(msgKey, message) {
+  async addToSportList(message) {
     //add to sports set list
     await redisClient.saddAsync('sports', message.d.event.sport)
     //add competition to the sport set list
     await redisClient.saddAsync(
       message.d.event.sport,
-      message.d.event.competition
+      msgHelper.cleanString(message.d.event.competition)
     )
     //add home team to the sport/competition team list
     await redisClient.saddAsync(
-      `${message.d.event.sport}:${message.d.event.competition}`,
-      message.d.event.h
+      msgHelper.cleanString(
+        `${message.d.event.sport}:${message.d.event.competition}`
+      ),
+      msgHelper.cleanString(message.d.event.h)
     )
     //add guest team to the sport/competition team list
     await redisClient.saddAsync(
-      `${message.d.event.sport}:${message.d.event.competition}`,
-      message.d.event.g
+      msgHelper.cleanString(
+        `${message.d.event.sport}:${message.d.event.competition}`
+      ),
+      msgHelper.cleanString(message.d.event.g)
     )
   }
 

@@ -1,12 +1,12 @@
 {
   "apps": [
     {
-      "name": "producer",
+      "name": "message-producer",
       "script": "./src/queue/producer.js",
       "watch": true
     },
     {
-      "name": "consumer",
+      "name": "message-consumer",
       "script": "./src/queue/consumer.js",
       "watch": true
     },
@@ -21,7 +21,7 @@
       "watch": true
     },
     {
-      "name": "monitor",
+      "name": "redis-monitor",
       "script": "./src/queue/monitor.js",
       "watch": false
     },

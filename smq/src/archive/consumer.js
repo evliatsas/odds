@@ -1,6 +1,7 @@
 'use strict'
 
 const config = require('../config/config')
+const msgHelper = require('../data/message-helper')
 const redisSMQ = require('redis-smq')
 const { MongoClient } = require('mongodb')
 
@@ -9,9 +10,7 @@ const Consumer = redisSMQ.Consumer
 class ArchiveConsumer extends Consumer {
   async consume(message, cb) {
     //calculate unique message key from event data
-    const msgKey = `${message.d.event.h}:${message.d.event.g}:${
-      message.d.event.competition
-    }:${message.d.event.sport}:${new Date().getFullYear()}`
+    const msgKey = msgHelper.generateKey(message)
 
     //create an archive entry for the message
     //add key and timestamp
@@ -36,7 +35,7 @@ class ArchiveConsumer extends Consumer {
 
   //initialize the mongo db client and the archive collection reference
   initMongoClient() {
-    const {host,port,database} = config.smq.mongodb
+    const { host, port, database } = config.smq.mongodb
     const url = `mongodb://${host}:${port}/${database}`
 
     const client = new MongoClient(url, { useNewUrlParser: true })
