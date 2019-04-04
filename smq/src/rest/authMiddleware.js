@@ -8,17 +8,22 @@ let checkToken = (req, res, next) => {
   }
 
   if (token) {
-    jwt.verify(token, config.token.secret, (err, decoded) => {
-      if (err) {
-        return res.status(401).json({
-          success: false,
-          message: 'Token is not valid'
-        })
-      } else {
-        req.decoded = decoded
-        next()
+    jwt.verify(
+      token,
+      config.token.secret,
+      { algorithms: ['HS512'] },
+      (err, decoded) => {
+        if (err) {
+          return res.status(401).json({
+            success: false,
+            message: 'Token is not valid'
+          })
+        } else {
+          req.decoded = decoded
+          next()
+        }
       }
-    })
+    )
   } else {
     return res.status(401).json({
       success: false,

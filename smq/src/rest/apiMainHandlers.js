@@ -13,6 +13,7 @@ module.exports.login = async (req, res) => {
       }
       if (password === storedPassword) {
         let token = jwt.sign({ username: username }, config.token.secret, {
+          algorithm: 'HS512',
           expiresIn: '24h'
         })
         res.status(200).json({
